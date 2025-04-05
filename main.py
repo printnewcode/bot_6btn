@@ -28,6 +28,7 @@ def startBot(message):
     #bot.send_message(message.chat.id, start_text, reply_markup=markup)
 
 def forward_check(message):
+    bot.clear_step_handler_by_chat_id(chat_id=message.chat.id)
     if message.text == "/start":
         retry_next_step(message.chat.id)
         return
