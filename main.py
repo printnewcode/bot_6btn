@@ -44,7 +44,7 @@ def forward_check(message):
     markup = types.InlineKeyboardMarkup()
     btn = types.InlineKeyboardButton(text="Написать менеджеру", callback_data='btn_8')
     markup.add(btn)
-    bot.send_message(message.chat.id, text_7, reply_markup=markup, parse_mode='Markdown')
+    bot.send_message(message.chat.id, "*Попробуйте снова!*"+text_7, reply_markup=markup, parse_mode='Markdown')
 
 
 def retry_next_step(id_):
