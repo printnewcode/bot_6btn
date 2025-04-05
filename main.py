@@ -28,8 +28,11 @@ def startBot(message):
     #bot.send_message(message.chat.id, start_text, reply_markup=markup)
 
 def forward_check(message):
+    if message.text == "/start":
+        retry_next_step(message.chat.id)
+        return
     markup = types.InlineKeyboardMarkup()
-    btn = types.InlineKeyboardButton(text="Отправить пригласительную ссылку", callback_data='btn_link')
+    btn = types.InlineKeyboardButton(text="Отправить пригласительную ссылку", callback_data=f'btn-link_{message.chat.id}')
     markup.add(btn)
     bot.forward_message(chat_id=OWNER_ID, from_chat_id=message.chat.id, message_id=message.message_id,
                         )
@@ -42,6 +45,13 @@ def forward_check(message):
     btn = types.InlineKeyboardButton(text="Написать менеджеру", callback_data='btn_8')
     markup.add(btn)
     bot.send_message(message.chat.id, text_7, reply_markup=markup, parse_mode='Markdown')
+
+
+def retry_next_step(id_):
+    msg = bot.send_message(id_, text_6, parse_mode="Markdown")
+    bot.register_next_step_handler(msg, forward_check)        
+
+
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_r(call):
@@ -104,8 +114,9 @@ def callback_r(call):
         markup.add(btn)
         bot.send_message(call.message.chat.id, f'Наш менеджер {manager} поможет вам и ответит на ваши вопросы', reply_markup=markup, parse_mode="Markdown")
 
-    elif call.data == "btn_link":
-        bot.send_message(call.message.chat.id, f'Вот ссылка на наш чат {link_guest}\nЖдем тебя!', parse_mode="Markdown")
+    elif call.data.startswith("btn-link"):
+        id_ = call.data.split("_")
+        bot.send_message(id_, f'Вот ссылка на наш чат {link_guest}\nЖдем тебя!', parse_mode="Markdown")
 
 
 
