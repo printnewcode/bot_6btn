@@ -49,12 +49,7 @@ def callback_r(call):
         markup = types.InlineKeyboardMarkup()
         btn = types.InlineKeyboardButton(text="Программа NOVAя INTENSIVE", callback_data='btn_2')
         markup.add(btn)
-        bot.send_photo(chat_id=call.message.chat.id,
-                       photo=open('media/second_2.JPG', 'rb'),
-                       caption=text_1,
-                       reply_markup=markup,
-                       parse_mode="Markdown"
-                       )
+        bot.send_message(call.message.chat.id, text_1, reply_markup=markup, parse_mode="Markdown")
 
     elif call.data == "btn_2":
         markup = types.InlineKeyboardMarkup()
@@ -92,7 +87,12 @@ def callback_r(call):
         markup = types.InlineKeyboardMarkup()
         btn = types.InlineKeyboardButton(text="Да, готова", callback_data='btn_6')
         markup.add(btn)
-        bot.send_message(call.message.chat.id, text_5, reply_markup=markup, parse_mode="Markdown")
+        bot.send_photo(chat_id=call.message.chat.id,
+                       photo=open('media/second_2.JPG', 'rb'),
+                       caption=text_5,
+                       reply_markup=markup,
+                       parse_mode="Markdown"
+                       )
 
     elif call.data == "btn_6":
         msg = bot.send_message(call.message.chat.id, text_6, parse_mode="Markdown")
