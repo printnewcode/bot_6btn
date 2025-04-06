@@ -38,7 +38,7 @@ def startBot(message):
     btn_1 = types.InlineKeyboardButton(text = "Что такое NOVAя INTENSIVE?", callback_data='btn_1')
     markup.add(btn_1)
     bot.send_photo(chat_id=message.chat.id, 
-        photo=open(os.path.join(os.path.dirname(__file__),"..", "..", "media", "start.JPEG")),
+        photo=open(os.path.join(os.path.dirname(__file__),"..", "..", "media", "start.JPEG"), 'rb'),
         caption=start_text,
         reply_markup=markup,
         parse_mode="Markdown"
