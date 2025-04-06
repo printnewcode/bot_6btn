@@ -37,7 +37,12 @@ def startBot(message):
     markup = types.InlineKeyboardMarkup()
     btn_1 = types.InlineKeyboardButton(text = "Что такое NOVAя INTENSIVE?", callback_data='btn_1')
     markup.add(btn_1)
-    bot.send_message(call.message.chat.id, text_1, reply_markup=markup, parse_mode="Markdown")
+    bot.send_photo(chat_id=message.chat.id, 
+        photo=open(os.path.join('media', 'start.JPEG'), 'rb'),
+        caption=start_text,
+        reply_markup=markup,
+        parse_mode="Markdown"
+        )
     #bot.send_message(message.chat.id, start_text, reply_markup=markup)
 
 def forward_check(message):
@@ -134,12 +139,7 @@ def callback_r(call):
         markup = types.InlineKeyboardMarkup()
         btn = types.InlineKeyboardButton(text="Программа NOVAя INTENSIVE", callback_data='btn_2')
         markup.add(btn)
-        bot.send_photo(chat_id=call.message.chat.id,
-                       photo=open('media/second_2.JPG', 'rb'),
-                       caption=text_1,
-                       reply_markup=markup,
-                       parse_mode="Markdown"
-                       )
+        bot.send_message(call.message.chat.id, text_1, reply_markup=markup, parse_mode="Markdown")
 
     elif call.data == "btn_2":
         markup = types.InlineKeyboardMarkup()
