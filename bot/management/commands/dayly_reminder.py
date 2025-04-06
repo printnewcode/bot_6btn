@@ -17,7 +17,7 @@ class Command(BaseCommand):
             if is_active_:
                 access_time = user.access_time_end
                 diff = access_time.replace(tzinfo=None) - datetime.now().replace(tzinfo=None)
-                if int(diff.days) < 5:
+                if diff.days < timedelta(days=5):
                     bot.send_message(text=f"У вас осталось лишь {diff.days} дней доступа! Для дальнейшего пользования, пожалуйста, продлите его")
                 else:
                     return
