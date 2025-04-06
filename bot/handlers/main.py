@@ -152,7 +152,7 @@ def callback_r(call):
         btn = types.InlineKeyboardButton(text="Хочу попасть на интенсив", callback_data='btn_4')
         markup.add(btn)
         bot.send_photo(chat_id=call.message.chat.id,
-                       photo=open(os.path.join(os.path.dirname(__file__),"..", "..",'../media/second.JPG'), 'rb'),
+                       photo=open(os.path.join(os.path.dirname(__file__),"..", "..",'media','second.JPG'), 'rb'),
                        caption=text_3,
                        reply_markup=markup,
                        parse_mode="Markdown"
@@ -160,12 +160,12 @@ def callback_r(call):
 
     elif call.data == "btn_4":
         bot.send_media_group(call.message.chat.id, [
-            open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_1.jpg'), 'rb'),
-            open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_2.PNG'), 'rb'),
-            open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_3.PNG'), 'rb'),
-            open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_4.PNG'), 'rb'),
-            open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_5.PNG'), 'rb'),
-            open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_6.PNG'), 'rb'),
+            telebot.types.InputMediaPhoto(open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_1.jpg')), 'rb'),
+            telebot.types.InputMediaPhoto(open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_2.PNG')), 'rb'),
+            telebot.types.InputMediaPhoto(open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_3.PNG')), 'rb'),
+            telebot.types.InputMediaPhoto(open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_4.PNG')), 'rb'),
+            telebot.types.InputMediaPhoto(open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_5.PNG')), 'rb'),
+            telebot.types.InputMediaPhoto(open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_6.PNG')), 'rb'),
             ]
             )
         markup = types.InlineKeyboardMarkup()
