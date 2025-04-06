@@ -3,7 +3,7 @@ from datetime import datetime
 from pytz import tzinfo
 
 from bot import bot
-from bot.utils import access_time
+from bot.utils import is_active
 from bot.models import User
 from Control.settings import CHAT_ID
 

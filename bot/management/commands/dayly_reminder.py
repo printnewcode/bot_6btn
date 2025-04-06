@@ -4,6 +4,7 @@ from pytz import tzinfo
 
 from bot import bot
 from bot.models import User
+from bot.utils import is_active
 
 
 class Command(BaseCommand):
