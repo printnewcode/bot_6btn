@@ -13,8 +13,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         users = User.objects.filter(is_paid = True)
         for user in users:
-            is_active = access_time.is_active(user)
-            if is_active:
+            is_active_ = access_time.is_active(user)
+            if is_active_:
                 access_time = user.access_time_end
                 diff = access_time.replace(tzinfo=None) - datetime.now().replace(tzinfo=None)
                 if int(diff.days) < 5:
