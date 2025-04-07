@@ -98,8 +98,12 @@ def admin_check_handler(call):
         #  Отправляем ссылку пользователю
         link = bot.create_chat_invite_link(chat_id=CHAT_ID, member_limit=1)
         bot.send_message(
-            text=f"Чек одобрен!\nВот ссылка на наш чат {link.invite_link}\nЖдем тебя!",
+            text=f"""
+Оплата прошла успешно ✅
+
+Вот твоя ссылка на чат интенсива {link.invite_link}""",
             chat_id=int(user.telegram_id),
+            parse_mode="Markdown"
             )
     else:
         bot.send_message(
