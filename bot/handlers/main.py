@@ -12,17 +12,10 @@ from bot.models import User
 from bot.utils import is_active, get_user
 from Control.settings import OWNER_ID, CHAT_ID
 
-"""token = os.getenv('TOKEN')
-OWNER_ID = os.getenv('OWNER_ID')  #'ID админа без ковычек'
-link_guest = os.getenv('LINK_GUEST')  #'пригласительная ссылка в чат'
-manager = os.getenv('MANAGER_ID')  #'username менеджера через @'
-CHAT_ID = os.getenv('CHAT_ID')"""
-
 
 def startBot(message):
     user_id = message.from_user.id
     user = User.objects.filter(telegram_id=user_id)
-
 
     if not user.exists():
         user = User.objects.create(
@@ -35,10 +28,10 @@ def startBot(message):
         user.first().username = message.from_user.username
         user.first().save()
     markup = types.InlineKeyboardMarkup()
-    btn_1 = types.InlineKeyboardButton(text = "Что такое NOVAя INTENSIVE?", callback_data='btn_1')
+    btn_1 = types.InlineKeyboardButton(text = "Готова начать путь к Novoй себе?", callback_data='btn_1')
     markup.add(btn_1)
     bot.send_photo(chat_id=message.chat.id, 
-        photo=open(os.path.join(os.path.dirname(__file__),"..", "..", "media", "start.JPEG"), 'rb'),
+        photo=open(os.path.join(os.path.dirname(__file__),"..", "..", "media", "start.HEIC"), 'rb'),
         caption=start_text,
         reply_markup=markup,
         parse_mode="Markdown"
@@ -50,16 +43,7 @@ def forward_check(message):
     if message.text == "/start":
         retry_next_step(message.chat.id)
         return
-    """markup = types.InlineKeyboardMarkup()
-    btn = types.InlineKeyboardButton(text="Отправить пригласительную ссылку", callback_data=f'btn-link_{message.chat.id}')
-    markup.add(btn)
-    bot.forward_message(chat_id=OWNER_ID, from_chat_id=message.chat.id, message_id=message.message_id,
-                        )"""
-    """bot.send_message(
-        text='Новая оплата!\nНажмите на кнопку ниже чтобы отправить пользователю пригласительную ссылку',
-        chat_id=OWNER_ID,
-        reply_markup=markup,
-    )"""
+    
     #  Отправка сообщения пользователю о том, что его чек передан админу
     markup = types.InlineKeyboardMarkup()
     btn = types.InlineKeyboardButton(text="Написать менеджеру", callback_data='btn_8')
@@ -127,7 +111,7 @@ def admin_check_handler(call):
 
 
 def retry_next_step(id_):
-    msg = bot.send_message(id_, "*Попробуйте снова!*\n"+text_5, parse_mode="Markdown")
+    msg = bot.send_message(id_, "*Попробуйте снова!*\n"+text_6, parse_mode="Markdown")
     bot.register_next_step_handler(msg, forward_check)        
 
 
@@ -143,22 +127,27 @@ def callback_r(call):
 
     elif call.data == "btn_2":
         markup = types.InlineKeyboardMarkup()
-        btn = types.InlineKeyboardButton(text="Что нужно для тренировок?", callback_data='btn_3')
+        btn = types.InlineKeyboardButton(text="Что меня ждет?", callback_data='btn_3')
         markup.add(btn)
-        bot.send_message(call.message.chat.id, text_2, reply_markup=markup, parse_mode="Markdown")
+        bot.send_photo(call.message.chat.id,photo=open(os.path.join(os.path.dirname(__file__),"..", "..",'media','photo_3.JPG'), 'rb'), caption=text_2, reply_markup=markup, parse_mode="Markdown")
 
     elif call.data == "btn_3":
         markup = types.InlineKeyboardMarkup()
-        btn = types.InlineKeyboardButton(text="Хочу попасть на интенсив", callback_data='btn_4')
+        btn = types.InlineKeyboardButton(text="Что нужно для тренировок?", callback_data='btn_4')
         markup.add(btn)
-        bot.send_photo(chat_id=call.message.chat.id,
+        """bot.send_photo(chat_id=call.message.chat.id,
                        photo=open(os.path.join(os.path.dirname(__file__),"..", "..",'media','second.JPG'), 'rb'),
                        caption=text_3,
                        reply_markup=markup,
                        parse_mode="Markdown"
-                       )
-
+                       )"""
+        bot.send_message(text=text_3, chat_id=call.message.chat.id, reply_markup=markup, parse_mode="Markdown")
     elif call.data == "btn_4":
+        markup = InlineKeyboardMarkup()
+        markup.add(InlineKeyboardButton(text="Хочу попасть на интенсив 😌", callback_data="btn_5"))
+        bot.send_photo(chat_id=call.message.chat.id, photo=open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'photo_4.JPG'), 'rb'),caption=text_4, reply_markup=markup, parse_mode="Markdown")
+
+    elif call.data == "btn_5":
         bot.send_media_group(call.message.chat.id, [
             telebot.types.InputMediaPhoto(open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_1.jpg'), 'rb')),
             telebot.types.InputMediaPhoto(open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_2.PNG'), 'rb')),
@@ -169,18 +158,30 @@ def callback_r(call):
             ]
             )
         markup = types.InlineKeyboardMarkup()
-        btn = types.InlineKeyboardButton(text="Зарегистрироваться на интенсив", callback_data='btn_5')
+        btn = types.InlineKeyboardButton(text="Зарегистрироваться на интенсив", callback_data='btn_6')
         markup.add(btn)
-        bot.send_message(call.message.chat.id, text_4, reply_markup=markup, parse_mode="Markdown")
+        bot.send_message(call.message.chat.id, text_5_1, reply_markup=markup, parse_mode="Markdown")
 
-    elif call.data == "btn_5":
+    elif call.data == "btn_6":
         markup = types.InlineKeyboardMarkup()
-        btn = types.InlineKeyboardButton(text="Да, готова", callback_data='btn_6')
+        btn = types.InlineKeyboardButton(text="Да, готова", callback_data='btn_7')
         markup.add(btn)
+        text=text_5_2
+        
+
+        """bot.send_photo(chat_id=call.message.chat.id,
+                        photo=open(os.path.join(os.path.dirname(__file__),"..", "..","media", "second_2.JPG"), 'rb'),
+                        caption=text,
+                        reply_markup=markup,
+                        parse_mode="Markdown"
+                        )"""
+        bot.send_message(call.message.chat.id, text, reply_markup=markup, parse_mode="Markdown")
+
+    elif call.data == "btn_7":
         text = ''
-        if not user.is_extended and not is_active(user):
-            text = text_5
-        if not user.is_extended and is_active(user):
+        if not is_active(user):
+            text = text_6
+        if user.is_extended and is_active(user):
             text= '''
             *Продление доступа на 1 месяц*
 
@@ -189,16 +190,8 @@ def callback_r(call):
             *Готова продолжить тренировки*
             *в NOVAя INTENSIVE?🤸🏻‍♂️*
             '''
-
-        bot.send_photo(chat_id=call.message.chat.id,
-                        photo=open(os.path.join(os.path.dirname(__file__),"..", "..","media", "second_2.JPG"), 'rb'),
-                        caption=text,
-                        reply_markup=markup,
-                        parse_mode="Markdown"
-                        )
-        #  bot.send_message(call.message.chat.id, text, reply_markup=markup, parse_mode="Markdown")
-
-    elif call.data == "btn_6":
+        else:
+            text= text_6
         msg = bot.send_message(call.message.chat.id, text_6, parse_mode="Markdown")
         bot.register_next_step_handler(msg, forward_check)        
 

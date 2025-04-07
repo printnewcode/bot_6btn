@@ -21,3 +21,4 @@ class Command(BaseCommand):
             if datetime.now().replace(tzinfo=None) - access_time.replace(tzinfo=None) >= timedelta(hours=1):
                 bot.send_message(text=TEXT_REMINDER, chat_id = user.telegram_id, reply_markup=markup, parse_mode="Markdown")
                 user.is_reminded = True
+                user.save()
