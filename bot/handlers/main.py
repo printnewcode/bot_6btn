@@ -149,10 +149,10 @@ def callback_r(call):
 
     elif call.data == "btn_5":
         bot.send_media_group(call.message.chat.id, [
-            telebot.types.InputMediaPhoto(open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_4.PNG'), 'rb')),
             telebot.types.InputMediaPhoto(open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_1.jpg'), 'rb')),
             telebot.types.InputMediaPhoto(open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_2.PNG'), 'rb')),
             telebot.types.InputMediaPhoto(open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_3.PNG'), 'rb')),
+            telebot.types.InputMediaPhoto(open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_4.PNG'), 'rb')),
             telebot.types.InputMediaPhoto(open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_5.PNG'), 'rb')),
             telebot.types.InputMediaPhoto(open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_6.PNG'), 'rb')),
             ]
