@@ -65,7 +65,7 @@ def forward_check(message):
     )
     user = get_user(message.chat.id)
     username = user.username
-    good = "доступ на 1.5 месяца" if not user.is_paid else "продление на 1 месяц"
+    good = "доступ на 1.5 месяца"
     text=f"Новая оплата!\nПользователь @{username} оплатил {good}. Вот чек!" 
     bot.send_message(
         text=text,
@@ -83,9 +83,8 @@ def admin_check_handler(call):
         user.is_paid = True
         if not is_active_:
             user.access_time_end = (datetime.now().replace(tzinfo=None) + timedelta(days=45))
-        if is_active_ and not user.is_extended:
-            user.access_time_end += timedelta(days=30)
-            user.is_extended = True
+        else:
+            user.access_time_end = (datetime.now().replace(tzinfo=None) + timedelta(days=45))
         user.save()
         try:
             unban_user(user)
@@ -182,28 +181,13 @@ def callback_r(call):
         bot.send_message(call.message.chat.id, text, reply_markup=markup, parse_mode="Markdown")
 
     elif call.data == "btn_7":
-        text = ''
-        if not is_active(user):
-            text = text_6
-        if not user.is_extended and is_active(user):
-            text= '''
-*Продление доступа на 1 месяц*
-Оплатить доступ можно по реквизитам, указанным ниже :
-
-*Номер телефона*: +79600634255
-*Банк*: Сбер/Тиньков
-*Сумма*: 990 рублей
-*Получатель*: Анастасия И.С.
-
-После перевода отправь пожалуйста чек сюда следующим сообщением 😉
-            '''
-        if is_active(user) and user.is_extended:
-            admin = User.objects.get(telegram_id=call.message.chat.id).username
-            text= f"Наша программа доступна лишь на 2.5 месяца. Вы уже обладаете полным доступом!\nЕсли есть вопросы, наш менеджер @{admin} поможет вам и ответит на ваши вопросы"
-            bot.send_message(call.message.chat.id,text)
-            return
+        text = text_6
+        admin = User.objects.get(telegram_id=call.message.chat.id).username
+        
         bot.clear_step_handler_by_chat_id(chat_id=call.message.chat.id)
-
+        if user.is_paid:
+            bot.send_message(text=f"Вы уже оплатили доступ!\nЕсли есть вопросы, наш менеджер @{admin} поможет вам и ответит на ваши вопросы", chat_id=call.message.chat.id)
+            return
         msg = bot.send_message(call.message.chat.id, text, parse_mode="Markdown")
         bot.register_next_step_handler(msg, forward_check)        
 
