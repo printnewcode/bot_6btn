@@ -53,6 +53,7 @@ def forward_check(message):
     #  Одобрение или отказ админом в доступе
     admin = User.objects.filter(is_admin=True).first()
     ADMIN_PAY = InlineKeyboardMarkup()
+    is_extended_ = user.is_extended 
     pay_accept = InlineKeyboardButton(text="Принять", callback_data=f"admin-pay_accept_{message.chat.id}")
     pay_decline = InlineKeyboardButton(text="Отказать", callback_data=f"admin-pay_decline_{message.chat.id}")
     ADMIN_PAY.add(pay_accept, pay_decline)
@@ -65,7 +66,7 @@ def forward_check(message):
     )
     user = get_user(message.chat.id)
     username = user.username
-    good = "доступ на 1.5 месяца" if not user.is_extended else "продление на 1 месяц"
+    good = "доступ на 1.5 месяца" if not user.is_paid else "продление на 1 месяц"
     text=f"Новая оплата!\nПользователь @{username} оплатил {good}. Вот чек!" 
     bot.send_message(
         text=text,
@@ -80,12 +81,13 @@ def admin_check_handler(call):
     user = get_user(id=id_)
     is_active_ = is_active(user)
     if decision == "accept":
-        user.is_paid = True
-        user.is_extended = True
         if not is_active_ and not user.is_extended:
             user.access_time_end = (datetime.now().replace(tzinfo=None) + timedelta(days=45))
-        elif is_active and not user.is_extended:
+        elif is_active_ and not user.is_extended:
             user.access_time_end += timedelta(days=30)
+        user.is_paid = True
+        if user.is_paid and not user.is_extended:
+            user.is_extended = True
         user.save()
         try:
             unban_user(user)
@@ -181,7 +183,7 @@ def callback_r(call):
         text = ''
         if not is_active(user):
             text = text_6
-        if user.is_extended and is_active(user):
+        if not user.is_extended and is_active(user):
             text= '''
             *Продление доступа на 1 месяц*
 
@@ -191,8 +193,11 @@ def callback_r(call):
             *в NOVAя INTENSIVE?🤸🏻‍♂️*
             '''
         else:
-            text= text_6
+            admin = User.objects.get(telegram_id=call.message.chat.id).username
+            text= f"Наша программа доступна лишь на 2.5 месяца. Вы уже обладаете полным доступом!\nЕсли есть вопросы, наш менеджер @{admin} поможет вам и ответит на ваши вопросы"
+            return
         bot.clear_step_handler_by_chat_id(chat_id=call.message.chat.id)
+
         msg = bot.send_message(call.message.chat.id, text_6, parse_mode="Markdown")
         bot.register_next_step_handler(msg, forward_check)        
 
