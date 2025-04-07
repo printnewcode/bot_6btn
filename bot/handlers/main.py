@@ -53,7 +53,6 @@ def forward_check(message):
     #  Одобрение или отказ админом в доступе
     admin = User.objects.filter(is_admin=True).first()
     ADMIN_PAY = InlineKeyboardMarkup()
-    is_extended_ = user.is_extended 
     pay_accept = InlineKeyboardButton(text="Принять", callback_data=f"admin-pay_accept_{message.chat.id}")
     pay_decline = InlineKeyboardButton(text="Отказать", callback_data=f"admin-pay_decline_{message.chat.id}")
     ADMIN_PAY.add(pay_accept, pay_decline)
