@@ -31,7 +31,7 @@ def startBot(message):
     btn_1 = types.InlineKeyboardButton(text = "Готова начать путь к Novoй себе?", callback_data='btn_1')
     markup.add(btn_1)
     bot.send_photo(chat_id=message.chat.id, 
-        photo=open(os.path.join(os.path.dirname(__file__),"..", "..", "media", "start.JPEG"), 'rb'),
+        photo=open(os.path.join(os.path.dirname(__file__),"..", "..", "media", "start.png"), 'rb'),
         caption=start_text,
         reply_markup=markup,
         parse_mode="Markdown"
@@ -187,11 +187,8 @@ def callback_r(call):
 Оплатить доступ можно по реквизитам, указанным ниже :
 
 *Номер телефона*:+79600634255
-
 *Банк*:Сбер/Тиньков
-
 *Сумма*:990 рублей
-
 Получатель:Анастасия И.С.
 
 После перевода отправь пожалуйста чек сюда следующим сообщением 😉
