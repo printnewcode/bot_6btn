@@ -195,6 +195,7 @@ def callback_r(call):
         else:
             admin = User.objects.get(telegram_id=call.message.chat.id).username
             text= f"Наша программа доступна лишь на 2.5 месяца. Вы уже обладаете полным доступом!\nЕсли есть вопросы, наш менеджер @{admin} поможет вам и ответит на ваши вопросы"
+            bot.send_message(call.message.chat.id,text)
             return
         bot.clear_step_handler_by_chat_id(chat_id=call.message.chat.id)
 
