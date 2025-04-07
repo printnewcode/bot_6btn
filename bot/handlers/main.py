@@ -192,6 +192,7 @@ def callback_r(call):
             '''
         else:
             text= text_6
+        bot.clear_step_handler_by_chat_id(chat_id=call.message.chat.id)
         msg = bot.send_message(call.message.chat.id, text_6, parse_mode="Markdown")
         bot.register_next_step_handler(msg, forward_check)        
 
