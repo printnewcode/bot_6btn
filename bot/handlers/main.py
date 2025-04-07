@@ -99,7 +99,7 @@ def admin_check_handler(call):
         link = bot.create_chat_invite_link(chat_id=CHAT_ID, member_limit=1)
         bot.send_message(
             text=f"""
-Оплата прошла успешно ✅
+*Оплата прошла успешно ✅*
 
 Вот твоя ссылка на чат интенсива {link.invite_link}""",
             chat_id=int(user.telegram_id),
