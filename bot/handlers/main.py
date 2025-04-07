@@ -80,12 +80,11 @@ def admin_check_handler(call):
     user = get_user(id=id_)
     is_active_ = is_active(user)
     if decision == "accept":
-        if not is_active_ and not user.is_extended:
-            user.access_time_end = (datetime.now().replace(tzinfo=None) + timedelta(days=45))
-        elif is_active_ and not user.is_extended:
-            user.access_time_end += timedelta(days=30)
         user.is_paid = True
-        if user.is_paid and not user.is_extended:
+        if not is_active_:
+            user.access_time_end = (datetime.now().replace(tzinfo=None) + timedelta(days=45))
+        if is_active_ and not user.is_extended:
+            user.access_time_end += timedelta(days=30)
             user.is_extended = True
         user.save()
         try:
