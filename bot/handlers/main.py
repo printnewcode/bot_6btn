@@ -184,11 +184,17 @@ def callback_r(call):
         if not user.is_extended and is_active(user):
             text= '''
             *Продление доступа на 1 месяц*
+            Оплатить доступ можно по реквизитам, указанным ниже :
 
-            Цена: _990 рублей_
+            *Номер телефона*:+79600634255
 
-            *Готова продолжить тренировки*
-            *в NOVAя INTENSIVE?🤸🏻‍♂️*
+            *Банк*:Сбер/Тиньков
+
+            *Сумма*:990 рублей
+
+            Получатель:Анастасия И.С.
+
+            После перевода отправь пожалуйста чек сюда следующим сообщением 😉
             '''
         if is_active(user) and user.is_extended:
             admin = User.objects.get(telegram_id=call.message.chat.id).username
@@ -197,7 +203,7 @@ def callback_r(call):
             return
         bot.clear_step_handler_by_chat_id(chat_id=call.message.chat.id)
 
-        msg = bot.send_message(call.message.chat.id, text_6, parse_mode="Markdown")
+        msg = bot.send_message(call.message.chat.id, text, parse_mode="Markdown")
         bot.register_next_step_handler(msg, forward_check)        
 
     elif call.data == "btn_8":
