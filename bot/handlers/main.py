@@ -28,22 +28,23 @@ def startBot(message):
         user.first().username = message.from_user.username
         user.first().save()
     markup = types.InlineKeyboardMarkup()
-    btn_1 = types.InlineKeyboardButton(text = "Готова начать путь к Novoй себе?", callback_data='btn_1')
+    btn_1 = types.InlineKeyboardButton(text="Готова начать путь к Novoй себе?", callback_data='btn_1')
     markup.add(btn_1)
-    bot.send_photo(chat_id=message.chat.id, 
-        photo=open(os.path.join(os.path.dirname(__file__),"..", "..", "media", "start.png"), 'rb'),
-        caption=start_text,
-        reply_markup=markup,
-        parse_mode="Markdown"
-        )
-    #bot.send_message(message.chat.id, start_text, reply_markup=markup)
+    bot.send_photo(chat_id=message.chat.id,
+                   photo=open(os.path.join(os.path.dirname(__file__), "..", "..", "media", "start.png"), 'rb'),
+                   caption=start_text,
+                   reply_markup=markup,
+                   parse_mode="Markdown"
+                   )
+    # bot.send_message(message.chat.id, start_text, reply_markup=markup)
+
 
 def forward_check(message):
     bot.clear_step_handler_by_chat_id(chat_id=message.chat.id)
     if message.text == "/start":
         retry_next_step(message.chat.id)
         return
-    
+
     #  Отправка сообщения пользователю о том, что его чек передан админу
     markup = types.InlineKeyboardMarkup()
     btn = types.InlineKeyboardButton(text="Написать менеджеру", callback_data='btn_8')
@@ -66,7 +67,7 @@ def forward_check(message):
     user = get_user(message.chat.id)
     username = user.username
     good = "доступ на 1.5 месяца"
-    text=f"Новая оплата!\nПользователь @{username} оплатил {good}. Вот чек!" 
+    text = f"Новая оплата!\nПользователь @{username} оплатил {good}. Вот чек!"
     bot.send_message(
         text=text,
         chat_id=int(admin.telegram_id),
@@ -82,9 +83,9 @@ def admin_check_handler(call):
     if decision == "accept":
         user.is_paid = True
         if not is_active_:
-            user.access_time_end = (datetime.now().replace(tzinfo=None) + timedelta(days=45))
+            user.access_time_end = (datetime(2025, 4, 15, 0, 0, 0, 0).replace(tzinfo=None) + timedelta(days=46))
         else:
-            user.access_time_end = (datetime.now().replace(tzinfo=None) + timedelta(days=45))
+            user.access_time_end = (datetime(2025, 4, 15, 0, 0, 0, 0).replace(tzinfo=None) + timedelta(days=46))
         user.save()
         try:
             unban_user(user)
@@ -103,25 +104,25 @@ def admin_check_handler(call):
 Вот твоя ссылка на чат интенсива {link.invite_link}""",
             chat_id=int(user.telegram_id),
             parse_mode="Markdown"
-            )
+        )
     else:
         bot.send_message(
             text="Ваш чек не одобрен! Проверьте все и отправьте еще раз",
             chat_id=int(user.telegram_id),
         )
     bot.delete_message(message_id=call.message.id, chat_id=call.message.chat.id)
-    bot.delete_message(message_id=call.message.id-1, chat_id=call.message.chat.id)
+    bot.delete_message(message_id=call.message.id - 1, chat_id=call.message.chat.id)
 
 
 def retry_next_step(id_):
-    msg = bot.send_message(id_, "*Попробуйте снова!*\n"+text_6, parse_mode="Markdown")
-    bot.register_next_step_handler(msg, forward_check)        
-
+    msg = bot.send_message(id_, "*Попробуйте снова!*\n" + text_6, parse_mode="Markdown")
+    bot.register_next_step_handler(msg, forward_check)
 
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_r(call):
     user = get_user(call.message.chat.id)
+    admin = User.objects.get(is_admin=True).username
     if call.data == "btn_1":
         markup = types.InlineKeyboardMarkup()
         btn = types.InlineKeyboardButton(text="Программа NOVAя INTENSIVE", callback_data='btn_2')
@@ -132,7 +133,9 @@ def callback_r(call):
         markup = types.InlineKeyboardMarkup()
         btn = types.InlineKeyboardButton(text="Что меня ждет?", callback_data='btn_3')
         markup.add(btn)
-        bot.send_photo(call.message.chat.id,photo=open(os.path.join(os.path.dirname(__file__),"..", "..",'media','photo_3.JPG'), 'rb'), caption=text_2, reply_markup=markup, parse_mode="Markdown")
+        bot.send_photo(call.message.chat.id,
+                       photo=open(os.path.join(os.path.dirname(__file__), "..", "..", 'media', 'photo_3.JPG'), 'rb'),
+                       caption=text_2, reply_markup=markup, parse_mode="Markdown")
 
     elif call.data == "btn_3":
         markup = types.InlineKeyboardMarkup()
@@ -148,18 +151,26 @@ def callback_r(call):
     elif call.data == "btn_4":
         markup = InlineKeyboardMarkup()
         markup.add(InlineKeyboardButton(text="Хочу попасть на интенсив 😌", callback_data="btn_5"))
-        bot.send_photo(chat_id=call.message.chat.id, photo=open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'photo_4.JPG'), 'rb'),caption=text_4, reply_markup=markup, parse_mode="Markdown")
+        bot.send_photo(chat_id=call.message.chat.id,
+                       photo=open(os.path.join(os.path.dirname(__file__), "..", "..", 'media', 'photo_4.JPG'), 'rb'),
+                       caption=text_4, reply_markup=markup, parse_mode="Markdown")
 
     elif call.data == "btn_5":
         bot.send_media_group(call.message.chat.id, [
-            telebot.types.InputMediaPhoto(open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_1.jpg'), 'rb')),
-            telebot.types.InputMediaPhoto(open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_2.PNG'), 'rb')),
-            telebot.types.InputMediaPhoto(open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_3.PNG'), 'rb')),
-            telebot.types.InputMediaPhoto(open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_4.PNG'), 'rb')),
-            telebot.types.InputMediaPhoto(open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_5.PNG'), 'rb')),
-            telebot.types.InputMediaPhoto(open(os.path.join(os.path.dirname(__file__),"..", "..", 'media', 'review_6.PNG'), 'rb')),
-            ]
-            )
+            telebot.types.InputMediaPhoto(
+                open(os.path.join(os.path.dirname(__file__), "..", "..", 'media', 'review_1.jpg'), 'rb')),
+            telebot.types.InputMediaPhoto(
+                open(os.path.join(os.path.dirname(__file__), "..", "..", 'media', 'review_2.PNG'), 'rb')),
+            telebot.types.InputMediaPhoto(
+                open(os.path.join(os.path.dirname(__file__), "..", "..", 'media', 'review_3.PNG'), 'rb')),
+            telebot.types.InputMediaPhoto(
+                open(os.path.join(os.path.dirname(__file__), "..", "..", 'media', 'review_4.PNG'), 'rb')),
+            telebot.types.InputMediaPhoto(
+                open(os.path.join(os.path.dirname(__file__), "..", "..", 'media', 'review_5.PNG'), 'rb')),
+            telebot.types.InputMediaPhoto(
+                open(os.path.join(os.path.dirname(__file__), "..", "..", 'media', 'review_6.PNG'), 'rb')),
+        ]
+                             )
         markup = types.InlineKeyboardMarkup()
         btn = types.InlineKeyboardButton(text="Зарегистрироваться на интенсив", callback_data='btn_6')
         markup.add(btn)
@@ -169,8 +180,7 @@ def callback_r(call):
         markup = types.InlineKeyboardMarkup()
         btn = types.InlineKeyboardButton(text="Да, готова", callback_data='btn_7')
         markup.add(btn)
-        text=text_5_2
-        
+        text = text_5_2
 
         """bot.send_photo(chat_id=call.message.chat.id,
                         photo=open(os.path.join(os.path.dirname(__file__),"..", "..","media", "second_2.JPG"), 'rb'),
@@ -182,21 +192,22 @@ def callback_r(call):
 
     elif call.data == "btn_7":
         text = text_6
-        admin = User.objects.get(telegram_id=call.message.chat.id).username
-        
+
         bot.clear_step_handler_by_chat_id(chat_id=call.message.chat.id)
         if user.is_paid:
-            bot.send_message(text=f"Вы уже оплатили доступ!\nЕсли есть вопросы, наш менеджер @{admin} поможет вам и ответит на ваши вопросы", chat_id=call.message.chat.id)
+            bot.send_message(
+                text=f"Вы уже оплатили доступ!\nЕсли есть вопросы, наш менеджер @{admin} поможет вам и ответит на ваши вопросы",
+                chat_id=call.message.chat.id)
             return
         msg = bot.send_message(call.message.chat.id, text, parse_mode="Markdown")
-        bot.register_next_step_handler(msg, forward_check)        
+        bot.register_next_step_handler(msg, forward_check)
 
     elif call.data == "btn_8":
-        admin = User.objects.get(telegram_id=call.message.chat.id).username
         markup = types.InlineKeyboardMarkup()
         btn = types.InlineKeyboardButton(text="Вернуться к оплате", callback_data='btn_6')
         markup.add(btn)
-        bot.send_message(call.message.chat.id, f'Наш менеджер @{admin} поможет вам и ответит на ваши вопросы', reply_markup=markup, parse_mode="Markdown")
+        bot.send_message(call.message.chat.id, f'Наш менеджер @{admin} поможет вам и ответит на ваши вопросы',
+                         reply_markup=markup, parse_mode="Markdown")
 
     elif call.data.startswith("btn-link"):
         _, id_ = call.data.split("_")
@@ -205,6 +216,7 @@ def callback_r(call):
 
     elif call.data.startswith("admin-pay"):
         admin_check_handler(call)
+
+
 def unban_user(user):
     bot.unban_chat_member(chat_id=CHAT_ID, user_id=user.telegram_id)
-
