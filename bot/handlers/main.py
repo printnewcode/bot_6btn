@@ -83,9 +83,9 @@ def admin_check_handler(call):
     if decision == "accept":
         user.is_paid = True
         if not is_active_:
-            user.access_time_end = (datetime(2025, 4, 15, 0, 0, 0, 0).replace(tzinfo=None) + timedelta(days=46))
+            user.access_time_end = datetime(2025, 6, 1, 20, 0, 0, 0)
         else:
-            user.access_time_end = (datetime(2025, 4, 15, 0, 0, 0, 0).replace(tzinfo=None) + timedelta(days=46))
+            user.access_time_end = datetime(2025, 6, 1, 20, 0, 0, 0)
         user.save()
         try:
             unban_user(user)
